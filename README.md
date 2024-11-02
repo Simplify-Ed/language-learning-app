@@ -1,2 +1,2 @@
 # language-learning-app
-conversation based laguage learning app
+conversation based language learning app
