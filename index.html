@@ -1,24 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Language Learning App</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Language Learning App</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="app">
-        <h1>Conversational Language Learning</h1>
-        <div id="lesson">
-            <h2>Lesson: <span id="context-name">Simple Greetings</span></h2>
-            <p id="phrase">Phrase: <span id="english-text">Hello</span></p>
-            <p id="hint">Hint: <span id="hint-text">A common greeting</span></p>
-            <p id="pronunciation">Pronunciation: <span id="pronunciation-text">oh-lah</span></p>
-            <input type="text" id="user-input" placeholder="Type your response here...">
-            <button id="check-answer">Check Answer</button>
-            <p id="feedback"></p>
-        </div>
-    </div>
-    <script src="app.js"></script>
+  <div id="app">
+    <!-- Level Navigation -->
+    <section id="level-navigation" class="screen">
+      <h1>Select a Level</h1>
+      <div id="levels">
+        <!-- Levels will be generated here by JavaScript -->
+      </div>
+    </section>
+
+    <!-- Introduction Stage -->
+    <section id="introduction-stage" class="screen">
+      <h1>Learn New Words</h1>
+      <div id="word-list">
+        <!-- Words/phrases will be displayed here -->
+      </div>
+      <button onclick="nextStage('usage-stage')">Next: Practice Usage</button>
+    </section>
+
+    <!-- Usage Practice Stage -->
+    <section id="usage-stage" class="screen">
+      <h1>Practice Usage</h1>
+      <p id="usage-example"></p>
+      <button onclick="nextStage('quiz-stage')">Next: Quiz</button>
+    </section>
+
+    <!-- Quiz Stage -->
+    <section id="quiz-stage" class="screen">
+      <h1>Quiz</h1>
+      <div id="quiz-options">
+        <!-- Quiz options will be injected here by JavaScript -->
+      </div>
+      <button onclick="nextStage('conversation-stage')">Next: Conversation Practice</button>
+    </section>
+
+    <!-- Conversation Stage -->
+    <section id="conversation-stage" class="screen">
+      <h1>Practice Conversation</h1>
+      <div id="conversation">
+        <!-- Conversation example with blanks for user to fill in -->
+      </div>
+      <button onclick="returnToLevelNav()">Finish Level</button>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>

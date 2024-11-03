@@ -1,70 +1,137 @@
 // app.js
-const tokens = [
+
+const levels = [
     {
-        english: "Hello",
-        foreign: "Hola",
-        context: "Simple Greetings",
-        hint: "A common greeting",
-        pronunciation: "oh-lah",
-        responses: [
-            {
-                userInput: "Hola",
-                nextToken: 1 // Move to the next token in the sequence
-            }
-        ]
-    },
-    {
-        english: "How much is this?",
-        foreign: "¿Cuánto cuesta esto?",
-        context: "Money",
-        hint: "Asking about price",
-        pronunciation: "kwan-to kwes-ta es-to",
-        responses: [
-            {
-                userInput: "¿Cuánto cuesta esto?",
-                nextToken: null // End of the conversation path for this topic
-            }
-        ]
+      id: 1,
+      words: [
+        { word: "สวัสดี", meaning: "Hello", pronunciation: "sa-wat-dee", usage: "สวัสดีครับ/ค่ะ (Hello, formal)" },
+        { word: "ขอบคุณ", meaning: "Thank you", pronunciation: "khob-khun", usage: "ขอบคุณมาก (Thank you very much)" }
+      ],
+      conversation: [
+        { phrase: "สวัสดีครับ", meaning: "Hello", blank: false },
+        { phrase: "ขอบคุณครับ", meaning: "Thank you", blank: true }
+      ]
     }
-    // Add more tokens as needed
-];
-
-// app.js
-let currentTokenIndex = 0;
-
-function displayToken() {
-    const token = tokens[currentTokenIndex];
-    document.getElementById("english-text").textContent = token.english;
-    document.getElementById("context-name").textContent = token.context;
-    document.getElementById("hint-text").textContent = token.hint;
-    document.getElementById("pronunciation-text").textContent = token.pronunciation;
-}
-
-function checkResponse() {
-    const userResponse = document.getElementById("user-input").value.trim().toLowerCase();
-    const token = tokens[currentTokenIndex];
-    const feedback = document.getElementById("feedback");
-
-    // Find if there’s a matching response in the token's responses array
-    const responseMatch = token.responses.find(r => r.userInput.toLowerCase() === userResponse);
-
-    if (responseMatch) {
-        feedback.textContent = "Correct!";
-        // Move to the next token in the sequence
-        if (responseMatch.nextToken !== null) {
-            currentTokenIndex = responseMatch.nextToken;
-            displayToken();
-            document.getElementById("user-input").value = ""; // Clear input
-        } else {
-            feedback.textContent = "You've completed this conversation!";
-        }
+  ];
+  
+  let currentLevel = 0;
+  let currentStage = 'level-navigation';
+  
+  function init() {
+    showScreen('level-navigation');
+    loadLevels();
+  }
+  
+  function loadLevels() {
+    const levelsContainer = document.getElementById('levels');
+    levelsContainer.innerHTML = levels.map(level => `
+      <button onclick="startLevel(${level.id})">Level ${level.id}</button>
+    `).join("");
+  }
+  
+  function startLevel(levelId) {
+    currentLevel = levels.find(level => level.id === levelId);
+    showScreen('introduction-stage');
+    loadIntroductionStage();
+  }
+  
+  function showScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(screen => {
+      screen.classList.remove('active');
+    });
+    document.getElementById(screenId).classList.add('active');
+  }
+  
+  function loadIntroductionStage() {
+    const wordList = document.getElementById('word-list');
+    wordList.innerHTML = currentLevel.words.map(word => `
+      <div class="word-entry">
+        <h3>${word.word}</h3>
+        <p><strong>Meaning:</strong> ${word.meaning}</p>
+        <p><strong>Pronunciation:</strong> ${word.pronunciation}</p>
+        <p><strong>Usage:</strong> ${word.usage}</p>
+      </div>
+    `).join("");
+  }
+  
+  function nextStage(stage) {
+    switch (stage) {
+      case 'usage-stage':
+        loadUsageStage();
+        break;
+      case 'quiz-stage':
+        loadQuizStage();
+        break;
+      case 'conversation-stage':
+        loadConversationStage();
+        break;
+    }
+    showScreen(stage);
+  }
+  
+  function loadUsageStage() {
+    document.getElementById('usage-example').textContent = currentLevel.words[0].usage;
+  }
+  
+  function loadQuizStage() {
+    const quizOptions = document.getElementById('quiz-options');
+    quizOptions.innerHTML = currentLevel.words.map(word => `
+      <button onclick="handleQuizAnswer('${word.meaning}', this)">${word.word}</button>
+    `).join("");
+  }
+  
+  function handleQuizAnswer(answer, button) {
+    const correctAnswer = "Thank you"; // Hardcoded for this example
+    if (answer === correctAnswer) {
+      button.classList.add("correct");
+      alert("Correct!"); // Basic feedback; we could improve this.
+      nextStage('conversation-stage');
     } else {
-        feedback.textContent = "Try again! Hint: " + token.hint;
+      button.classList.add("incorrect");
+      alert("Try again!");
     }
-}
-
-document.getElementById("check-answer").addEventListener("click", checkResponse);
-
-// Initialize the first token display
-displayToken();
-
+  }
+  
+  function loadConversationStage() {
+    const conversation = document.getElementById('conversation');
+    conversation.innerHTML = currentLevel.conversation.map(sentence => {
+      if (sentence.blank) {
+        return `<input type="text" placeholder="Translate '${sentence.meaning}'" class="conversation-input">`;
+      }
+      return `<p>${sentence.phrase}</p>`;
+    }).join("");
+  
+    const finishButton = document.createElement('button');
+    finishButton.textContent = "Check Conversation";
+    finishButton.onclick = checkConversation;
+    conversation.appendChild(finishButton);
+  }
+  
+  function checkConversation() {
+    const inputs = document.querySelectorAll('.conversation-input');
+    let correct = true;
+  
+    inputs.forEach((input, index) => {
+      const correctAnswer = currentLevel.conversation[index].phrase;
+      if (input.value === correctAnswer) {
+        input.classList.add("correct");
+      } else {
+        input.classList.add("incorrect");
+        correct = false;
+      }
+    });
+  
+    if (correct) {
+      alert("Well done! You've completed the conversation.");
+      returnToLevelNav();
+    } else {
+      alert("Some answers are incorrect. Try again!");
+    }
+  }
+  
+  function returnToLevelNav() {
+    showScreen('level-navigation');
+  }
+  
+  init();
+  
