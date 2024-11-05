@@ -5,30 +5,32 @@ let currentStage = "level-navigation";
 
 // Sample level data
 const levels = [
-  {
-    id: 1,
-    tokens: [
-      {
-        word: "สวัสดี",
-        meaning: "Hello",
-        usage: "สวัสดีครับทุกคน (Hello everyone)",
-        quizOptions: ["Hello", "Goodbye", "Thank you"],
-        correctAnswer: "Hello"
-      },
-      {
-        word: "ขอบคุณ",
-        meaning: "Thank you",
-        usage: "ขอบคุณมาก (Thank you very much)",
-        quizOptions: ["Sorry", "Thank you", "Hello"],
-        correctAnswer: "Thank you"
-      }
-    ],
-    conversation: [
-      "สวัสดีครับ", // Hello
-      "ขอบคุณครับ" // Thank you
-    ]
-  }
-];
+    {
+      id: 1,
+      tokens: [
+        {
+          word: "สวัสดี",
+          pronunciation: "sa-wat-dee",
+          meaning: "Hello",
+          usage: "สวัสดีครับทุกคน (Hello everyone)",
+          quizOptions: ["Hello", "Goodbye", "Thank you"],
+          correctAnswer: "Hello"
+        },
+        {
+          word: "ขอบคุณ",
+          pronunciation: "khob-khun",
+          meaning: "Thank you",
+          usage: "ขอบคุณมาก (Thank you very much)",
+          quizOptions: ["Sorry", "Thank you", "Hello"],
+          correctAnswer: "Thank you"
+        }
+      ],
+      conversation: [
+        "สวัสดีครับ", // Hello
+        "ขอบคุณครับ" // Thank you
+      ]
+    }
+  ];
 
 // Initialize the app
 function init() {
@@ -75,14 +77,15 @@ function loadCurrentStage() {
 
 // Show introduction page
 function loadIntroductionPage(token) {
-  document.getElementById("word-list").innerHTML = `
-    <div class="word-entry">
-      <h2>${token.word}</h2>
-      <p><strong>Meaning:</strong> ${token.meaning}</p>
-    </div>
-  `;
-  showScreen("introduction-stage");
-}
+    document.getElementById("word-list").innerHTML = `
+      <div class="word-entry">
+        <h2>${token.word}</h2>
+        <p><strong>Pronunciation:</strong> ${token.pronunciation}</p>
+        <p><strong>Meaning:</strong> ${token.meaning}</p>
+      </div>
+    `;
+    showScreen("introduction-stage");
+  }
 
 // Show usage example page
 function loadUsagePage(token) {
