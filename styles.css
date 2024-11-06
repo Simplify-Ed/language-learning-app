@@ -49,12 +49,29 @@ body {
     background-color: #dc3545;
   }
   
-  .word-entry {
+
+  .word-entry, .sentence-entry {
+    text-align: center; /* Center-align text within these elements */
     padding: 10px;
     margin-bottom: 15px;
     background-color: #e9ecef;
     border-radius: 5px;
   }
+  
+  .word-entry h2, .sentence-entry h3 {
+    margin: 0;
+    padding-bottom: 8px;
+  }
+  
+  .word-entry p, .sentence-entry p {
+    margin: 5px 0;
+  }
+  
+/* Center-align heading in the introduction stage */
+#introduction-stage h1 {
+    text-align: center;
+  }
+  
   
   .conversation-input {
     padding: 8px;
@@ -72,3 +89,28 @@ body {
     border-color: #dc3545;
   }
 
+/* styles.css */
+.token-image {
+    display: block;
+    margin: 0 auto 10px; /* Center and add spacing */
+    max-width: 50px; /* Set max width for consistency */
+    height: auto; /* Maintains aspect ratio */
+  }
+  
+  .practice-box {
+    background-color: #e9ecef; /* Light grey background */
+    padding: 10px;            /* Padding around content */
+    margin-bottom: 15px;      /* Space between each box */
+    border-radius: 5px;       /* Rounded corners */
+    text-align: center;       /* Center the text inside */
+  }
+  
+  .practice-box h3 {
+    margin: 0;
+    padding-bottom: 8px;
+  }
+  
+  .practice-box p {
+    margin: 5px 0;
+  }
+  

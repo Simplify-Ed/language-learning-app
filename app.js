@@ -12,7 +12,24 @@ const levels = [
           word: "สวัสดี",
           pronunciation: "sa-wat-dee",
           meaning: "Hello",
-          usage: "สวัสดีครับทุกคน (Hello everyone)",
+          image: "Assets/bye-bye.png",
+          sentences: [
+            {
+              sentence: "สวัสดีครับทุกคน",
+              pronunciation: "sa-wat-dee khrap tuk-kon",
+              translation: "Hello everyone"
+            },
+            {
+              sentence: "สวัสดีครับ",
+              pronunciation: "sa-wat-dee khrap",
+              translation: "Hello (formal)"
+            },
+            {
+              sentence: "สวัสดีค่ะ",
+              pronunciation: "sa-wat-dee ka",
+              translation: "Hello (female speaker)"
+            }
+          ],
           quizOptions: ["Hello", "Goodbye", "Thank you"],
           correctAnswer: "Hello"
         },
@@ -20,17 +37,32 @@ const levels = [
           word: "ขอบคุณ",
           pronunciation: "khob-khun",
           meaning: "Thank you",
-          usage: "ขอบคุณมาก (Thank you very much)",
+          sentences: [
+            {
+              sentence: "ขอบคุณสำหรับของขวัญ",
+              pronunciation: "khob-khun sam-rap khong-kwan",
+              translation: "Thank you for the gift"
+            },
+            {
+              sentence: "ขอบคุณครับ",
+              pronunciation: "khob-khun khrap",
+              translation: "Thank you (formal)"
+            },
+            {
+              sentence: "ขอบคุณมาก",
+              pronunciation: "khob-khun mak",
+              translation: "Thank you very much"
+            }
+          ],
           quizOptions: ["Sorry", "Thank you", "Hello"],
           correctAnswer: "Thank you"
         }
-      ],
-      conversation: [
-        "สวัสดีครับ", // Hello
-        "ขอบคุณครับ" // Thank you
       ]
     }
   ];
+  
+  
+  
 
 // Initialize the app
 function init() {
@@ -63,8 +95,8 @@ function loadCurrentStage() {
     case "introduction-stage":
       loadIntroductionPage(token);
       break;
-    case "usage-stage":
-      loadUsagePage(token);
+    case "practice-stage":
+      loadPracticePage(token);
       break;
     case "quiz-stage":
       loadQuizPage(token);
@@ -79,19 +111,40 @@ function loadCurrentStage() {
 function loadIntroductionPage(token) {
     document.getElementById("word-list").innerHTML = `
       <div class="word-entry">
-        <h2>${token.word}</h2>
-        <p><strong>Pronunciation:</strong> ${token.pronunciation}</p>
-        <p><strong>Meaning:</strong> ${token.meaning}</p>
+      <img src="${token.image}" alt="${token.meaning} graphic" class="token-image">        <h2>${token.word}</h2>
+        <p>${token.pronunciation}</p>
+        <p>${token.meaning}</p>
       </div>
+      <div class="sentence-entry">
+      <h3>${token.sentences[0].sentence}</h3>   <!-- First sentence -->
+      <p>${token.sentences[0].pronunciation}</p> <!-- First sentence pronunciation -->
+      <p>${token.sentences[0].translation}</p>    <!-- First sentence translation -->
+    </div>
     `;
     showScreen("introduction-stage");
   }
+  
+  
 
 // Show usage example page
-function loadUsagePage(token) {
-  document.getElementById("usage-example").innerText = token.usage;
-  showScreen("usage-stage");
-}
+function loadPracticePage(token) {
+    const practiceContainer = document.getElementById("practice-sentences");
+  
+    // Create HTML for each sentence in the `sentences` array
+    const sentencesHtml = token.sentences.map(sentence => `
+      <div class="practice-box">
+        <h3>${sentence.sentence}</h3>
+        <p>${sentence.pronunciation}</p>
+        <p>${sentence.translation}</p>
+      </div>
+    `).join('');
+  
+    // Set the inner HTML of the practice container
+    practiceContainer.innerHTML = sentencesHtml;
+    showScreen("practice-stage");
+  }
+  
+  
 
 // Show quiz page
 function loadQuizPage(token) {
@@ -113,11 +166,17 @@ function handleQuizAnswer(selectedAnswer, correctAnswer) {
 }
 
 // Move to the next stage or token
-function nextStage(next) {
-  if (next === 'usage-stage') currentStage = 'usage-stage';
-  else if (next === 'quiz-stage') currentStage = 'quiz-stage';
-  loadCurrentStage();
-}
+function nextStage() {
+    if (currentStage === 'practice-stage') {
+      currentStage = 'quiz-stage';
+    } else if (currentStage === 'introduction-stage') {
+      currentStage = 'practice-stage';
+    } else if (currentStage === 'quiz-stage') {
+      currentStage = 'conversation-stage';
+    }
+    loadCurrentStage();
+  }
+  
 
 // Proceed to the next token or conversation stage
 function nextTokenOrConversation() {
