@@ -18,39 +18,42 @@
 
         <!-- Introduction Stage -->
     <section id="introduction-stage" class="screen">
-        <h1>New Word</h1>
+        <h1 class="page-h1">New Word</h1>
         <div id="word-list">
         <!-- Words/phrases will be displayed here -->
         </div>
-        <button onclick="nextStage()">Next: Practice</button>
+        <button class="page-button" onclick="nextStage()">Next: Practice</button>
     </section>
     
     <!-- Practice Stage -->
     <section id="practice-stage" class="screen">
-        <h1>Practice</h1>
+        <h1 class="page-h1">Practice</h1>
         <div id="practice-sentences">
         <!-- Practice sentences will be injected here by JavaScript -->
         </div>
-        <button onclick="nextStage()">Next: Quiz</button>
+        <button class="page-button" onclick="nextStage()">Next: Quiz</button>
     </section>
     
     <!-- Quiz Stage -->
     <section id="quiz-stage" class="screen">
-        <h1>Quiz</h1>
-        <div id="quiz-options">
-        <!-- Quiz options will be injected here by JavaScript -->
+        <div class="page-h1" id="quiz-word">
+        <!-- English meaning and instructions will be injected here by JavaScript -->
         </div>
-        <button onclick="nextStage()">Next: Conversation Practice</button>
+        <div id="quiz-options">
+        <!-- Quiz options (Thai word and pronunciation) will be injected here by JavaScript -->
+        </div>
+        <button class="page-button" onclick="nextStage()">Next: Conversation Practice</button>
     </section>
+  
   
 
     <!-- Conversation Stage -->
     <section id="conversation-stage" class="screen">
-      <h1>Practice Conversation</h1>
+      <h1 class="page-h1" >Practice Conversation</h1>
       <div id="conversation">
         <!-- Conversation example with blanks for user to fill in -->
       </div>
-      <button onclick="returnToLevelNav()">Finish Level</button>
+      <button class="page-button" onclick="returnToLevelNav()">Finish Level</button>
     </section>
   </div>
 

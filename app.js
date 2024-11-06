@@ -56,6 +56,18 @@ const levels = [
           ],
           quizOptions: ["Sorry", "Thank you", "Hello"],
           correctAnswer: "Thank you"
+        },
+        {
+          word: "ไป",
+          pronunciation: "bpai",
+          meaning: "Go",
+          sentences: [/* ... */]
+        },
+        {
+          word: "มา",
+          pronunciation: "maa",
+          meaning: "Come",
+          sentences: [/* ... */]
         }
       ]
     }
@@ -148,22 +160,53 @@ function loadPracticePage(token) {
 
 // Show quiz page
 function loadQuizPage(token) {
-  const quizContainer = document.getElementById("quiz-options");
-  quizContainer.innerHTML = token.quizOptions.map(
-    (option) => `<button onclick="handleQuizAnswer('${option}', '${token.correctAnswer}')">${option}</button>`
-  ).join("");
-  showScreen("quiz-stage");
-}
+    const quizContainer = document.getElementById("quiz-options");
+  
+    // Display the English meaning at the top of the page
+    document.getElementById("quiz-word").innerHTML = `
+      <h2>${token.meaning}</h2>
+      <p>Guess the correct Thai word:</p>
+    `;
+  
+    // Prepare answer choices (one correct answer and three incorrect options)
+    const correctAnswer = { word: token.word, pronunciation: token.pronunciation };
+    const otherOptions = levels
+      .flatMap(level => level.tokens)
+      .filter(t => t.word !== correctAnswer.word) // Exclude the correct answer
+      .map(t => ({ word: t.word, pronunciation: t.pronunciation }));
+    
+    // Randomly select three incorrect answers
+    const incorrectAnswers = otherOptions
+      .sort(() => 0.5 - Math.random())
+      .slice(0, 3);
+  
+    // Combine the correct and incorrect answers, then shuffle them
+    const allOptions = [...incorrectAnswers, correctAnswer]
+      .sort(() => 0.5 - Math.random());
+  
+    // Create the quiz options as buttons with Thai word and pronunciation
+    quizContainer.innerHTML = allOptions.map(option => `
+      <button onclick="handleQuizAnswer('${option.word}', '${correctAnswer.word}')" class="quiz-card">
+        <h3>${option.word}</h3>
+        <p>${option.pronunciation}</p>
+      </button>
+    `).join("");
+  
+    // Show the quiz screen
+    showScreen("quiz-stage");
+  }
+  
 
 // Handle quiz answer
-function handleQuizAnswer(selectedAnswer, correctAnswer) {
-  if (selectedAnswer === correctAnswer) {
-    alert("Correct!");
-    nextTokenOrConversation();
-  } else {
-    alert("Incorrect. Try again!");
+function handleQuizAnswer(selectedWord, correctWord) {
+    if (selectedWord === correctWord) {
+      alert("Correct! Great job!");
+      nextStage();
+    } else {
+      alert("Incorrect. Try again!");
+    }
   }
-}
+  
 
 // Move to the next stage or token
 function nextStage() {
