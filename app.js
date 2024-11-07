@@ -15,63 +15,108 @@ const levels = [
           image: "Assets/bye-bye.png",
           sentences: [
             {
-              sentence: "สวัสดีครับทุกคน",
-              pronunciation: "sa-wat-dee khrap tuk-kon",
-              translation: "Hello everyone"
+              sentence: "Hello",
+              pronunciation: "sa-wat-dee ",
+              translation: "สวัสดี"
             },
             {
-              sentence: "สวัสดีครับ",
-              pronunciation: "sa-wat-dee khrap",
-              translation: "Hello (formal)"
+              sentence: "Hello, how are you?",
+              pronunciation: "sa-wat-dee, khun sabai dee mai?",
+              translation: "สวัสดีคุณสบายดีไหม?"
             },
             {
-              sentence: "สวัสดีค่ะ",
-              pronunciation: "sa-wat-dee ka",
-              translation: "Hello (female speaker)"
+              sentence: "Hello, nice to meet you.",
+              pronunciation: "sa-wat-dee yin-dee tee dai ruu-jak",
+              translation: "สวัสดียินดีที่ได้รู้จัก"
             }
           ],
           quizOptions: ["Hello", "Goodbye", "Thank you"],
           correctAnswer: "Hello"
         },
         {
-          word: "ขอบคุณ",
-          pronunciation: "khob-khun",
-          meaning: "Thank you",
+          word: "คุณสบายดีไหม?",
+          pronunciation: "khun sabai dee mai?",
+          meaning: "How are you?",
           sentences: [
             {
-              sentence: "ขอบคุณสำหรับของขวัญ",
-              pronunciation: "khob-khun sam-rap khong-kwan",
-              translation: "Thank you for the gift"
+              sentence: "How are you today?",
+              pronunciation: "khun sabai dee mai wan nee?",
+              translation: "คุณสบายดีไหมวันนี้?"
             },
             {
-              sentence: "ขอบคุณครับ",
-              pronunciation: "khob-khun khrap",
-              translation: "Thank you (formal)"
+              sentence: "I just wanted to ask, how are you?",
+              pronunciation: "phom kae ma tham khun sabai dee mai?",
+              translation: "ผมแค่มาถามคุณสบายดีไหม?"
             },
             {
-              sentence: "ขอบคุณมาก",
-              pronunciation: "khob-khun mak",
-              translation: "Thank you very much"
+              sentence: "How are you, my friend?",
+              pronunciation: "khun sabai dee mai phuean rak?",
+              translation: "คุณสบายดีไหมเพื่อนรัก?"
             }
           ],
-          quizOptions: ["Sorry", "Thank you", "Hello"],
-          correctAnswer: "Thank you"
+          quizOptions: ["How are you?", "What’s your name?", "Good morning"],
+          correctAnswer: "How are you?"
         },
         {
-          word: "ไป",
-          pronunciation: "bpai",
-          meaning: "Go",
-          sentences: [/* ... */]
+          word: "สบายดี",
+          pronunciation: "sabai dee",
+          meaning: "I'm fine",
+          sentences: [
+            {
+              sentence: "I'm fine, thank you.",
+              pronunciation: "sabai dee, khop khun khrap/ka",
+              translation: "สบายดีขอบคุณครับ/ค่ะ"
+            },
+            {
+              sentence: "I'm fine, and you?",
+              pronunciation: "sabai dee laew khun la?",
+              translation: "สบายดีแล้วคุณล่ะ?"
+            },
+            {
+              sentence: "I’m fine after resting.",
+              pronunciation: "sabai dee lang phak phawn",
+              translation: "สบายดีหลังพักผ่อน"
+            }
+          ],
+          quizOptions: ["I'm fine", "Thank you", "See you later"],
+          correctAnswer: "I'm fine"
         },
         {
-          word: "มา",
-          pronunciation: "maa",
-          meaning: "Come",
-          sentences: [/* ... */]
+          word: "แล้วคุณล่ะ?",
+          pronunciation: "laew khun la?",
+          meaning: "And you?",
+          sentences: [
+            {
+              sentence: "I'm fine, and you?",
+              pronunciation: "sabai dee laew khun la?",
+              translation: "สบายดีแล้วคุณล่ะ?"
+            },
+            {
+              sentence: "And you, how was your day?",
+              pronunciation: "laew khun la wan nee pen yang ngai?",
+              translation: "แล้วคุณล่ะวันนี้เป็นยังไง?"
+            },
+            {
+              sentence: "Nice to meet you, and you?",
+              pronunciation: "yin-dee tee dai ruu-jak laew khun la?",
+              translation: "ยินดีที่ได้รู้จักแล้วคุณล่ะ?"
+            }
+          ],
+          quizOptions: ["And you?", "Thank you", "Goodbye"],
+          correctAnswer: "And you?"
         }
-      ]
+      ],
+      // Define the conversation as references to tokens and their sentences
+conversation: [
+    { tokenIndex: 0, sentenceIndex: 0, speaker: "p1" }, // "Hello"
+    { tokenIndex: 0, sentenceIndex: 0, speaker: "p2" }, // "Hello"
+    { tokenIndex: 1, sentenceIndex: 0, speaker: "p1" }, // "How are you?"
+    { tokenIndex: 2, sentenceIndex: 1, speaker: "p1" }, // "I'm fine, and you?"
+    { tokenIndex: 2, sentenceIndex: 0, speaker: "p2" }  // "I'm fine, thank you."
+  ]
     }
   ];
+  
   
   
   
@@ -128,9 +173,9 @@ function loadIntroductionPage(token) {
         <p>${token.meaning}</p>
       </div>
       <div class="sentence-entry">
-      <h3>${token.sentences[0].sentence}</h3>   <!-- First sentence -->
+      <h3>${token.sentences[0].translation}</h3>   <!-- First sentence -->
       <p>${token.sentences[0].pronunciation}</p> <!-- First sentence pronunciation -->
-      <p>${token.sentences[0].translation}</p>    <!-- First sentence translation -->
+      <p>${token.sentences[0].sentence}</p>    <!-- First sentence translation -->
     </div>
     `;
     showScreen("introduction-stage");
@@ -145,9 +190,9 @@ function loadPracticePage(token) {
     // Create HTML for each sentence in the `sentences` array
     const sentencesHtml = token.sentences.map(sentence => `
       <div class="practice-box">
-        <h3>${sentence.sentence}</h3>
+        <h3>${sentence.translation}</h3>
         <p>${sentence.pronunciation}</p>
-        <p>${sentence.translation}</p>
+        <p>${sentence.sentence}</p>
       </div>
     `).join('');
   
@@ -210,15 +255,23 @@ function handleQuizAnswer(selectedWord, correctWord) {
 
 // Move to the next stage or token
 function nextStage() {
-    if (currentStage === 'practice-stage') {
-      currentStage = 'quiz-stage';
-    } else if (currentStage === 'introduction-stage') {
+    if (currentStage === 'introduction-stage') {
       currentStage = 'practice-stage';
+    } else if (currentStage === 'practice-stage') {
+      currentStage = 'quiz-stage';
     } else if (currentStage === 'quiz-stage') {
-      currentStage = 'conversation-stage';
+      // If we have more tokens, go to the introduction of the next token
+      if (currentTokenIndex < currentLevel.tokens.length - 1) {
+        currentTokenIndex++;
+        currentStage = 'introduction-stage';
+      } else {
+        // If all tokens are completed, go to the conversation stage
+        currentStage = 'conversation-stage';
+      }
     }
     loadCurrentStage();
   }
+  
   
 
 // Proceed to the next token or conversation stage
@@ -235,12 +288,24 @@ function nextTokenOrConversation() {
 
 // Show conversation page
 function loadConversationPage() {
-  const conversationContainer = document.getElementById("conversation");
-  conversationContainer.innerHTML = currentLevel.conversation
-    .map((phrase, index) => `<p>${phrase}</p>`)
-    .join("");
-  showScreen("conversation-stage");
-}
+    const conversationContainer = document.getElementById("conversation");
+  
+    // Generate HTML for each conversation bubble by referencing tokens and sentences
+    conversationContainer.innerHTML = currentLevel.conversation.map(line => {
+      const token = currentLevel.tokens[line.tokenIndex];
+      const sentence = token.sentences[line.sentenceIndex];
+      return `
+        <div class="chat-bubble ${line.speaker}">
+          <p class="translation">${sentence.translation}</p>
+          <p class="pronunciation">${sentence.pronunciation}</p>
+          <p class="text">${sentence.sentence}</p>
+        </div>
+      `;
+    }).join('');
+  
+    showScreen("conversation-stage");
+  }
+  
 
 // Show the appropriate screen
 function showScreen(screenId) {
